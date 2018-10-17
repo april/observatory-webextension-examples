@@ -1,16 +1,16 @@
 {
 
-  "description": "Altering HTTP responses",
+  "description": "Observatory Scanner",
   "manifest_version": 2,
-  "name": "http-response-filter",
+  "name": "observatory-scanner",
   "version": "1.0",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/http-response",
+  "homepage_url": "https://github.com/april/observatory-webextension-examples/tree/master/april",
   "icons": {
-    "48": "pen.svg"
+    "48": "icons/unknown.svg"
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking", "https://example.com/*"
+    "webRequest", "webRequestBlocking", "http://*", "https://*"
   ],
 
   "background": {
