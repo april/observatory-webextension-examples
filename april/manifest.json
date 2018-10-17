@@ -10,7 +10,7 @@
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking", "http://*", "https://*"
+    "tabs", "webRequest", "webRequestBlocking", "http://*/*", "https://*/*"
   ],
 
   "background": {
@@ -20,8 +20,7 @@
   "browser_action": {
     "browser_style": true,
     "default_icon": "icons/unknown.svg",
-    "default_title": "Observatory Scan Results",
-    "default_popup": "popup/index.html"
+    "default_title": "Observatory Scan Results"
   },
 
   "applications": {
