@@ -29,7 +29,6 @@ updateActiveTab();
 
 // This defines a different listener
 function setIcon(grade) {
-
   grade_path = "./icons/".concat(grade).concat('.svg');
 
   browser.browserAction.setIcon({
@@ -39,31 +38,28 @@ function setIcon(grade) {
   return {};
 }
 
-// Invoke scan
 function invokeScan(host, callback) {
     $.post("https://http-observatory.security.mozilla.org/api/v1/analyze?host=".concat(host), callback);
 }
 
-// Check scan
 function checkScan(host, callback) {
     $.get("https://http-observatory.security.mozilla.org/api/v1/analyze?host=".concat(host), callback)
 }
 
-// Poll for results
-function observatoryScan(details) {
-  hostname = new URL(details.url).hostname;
+function doCheckPoll() {
+    checkScan(hostname, function(data) {
+        if (data.state == "FINISHED") {
+          setIcon(data.grade);
+        } else {
+          setTimeout(doCheckPoll, 1000);
+        }
+    })
+}
 
+function observatoryScan(details) {
+  console.log(details)
+  hostname = new URL(details.url).hostname;
   invokeScan(hostname, function(data) {
-    function doCheckPoll() {
-        checkScan(hostname, function(data) {
-            if (data.state == "FINISHED") {
-              setIcon(data.grade);
-            } else {
-                // wait for 1 sec, then retry
-                setTimeout(doCheckPoll, 1000);
-            }
-        })
-    }
     doCheckPoll();
   });
 }
