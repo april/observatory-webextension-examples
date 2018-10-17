@@ -1,0 +1,30 @@
+{
+
+  "description": "HTTP Observatory Scanner Extension",
+  "manifest_version": 2,
+  "name": "HTTP Observatory Scanner Extension",
+  "version": "1.0",
+  "homepage_url": "https://github.com/april/observatory-webextension-examples",
+  
+  "browser_action": {
+    "default_icon": {
+
+      "48": "icons/unknown.svg"
+    }
+  },
+
+  "permissions": [
+    "webRequest", "*://*/*", "tabs"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "applications": {
+    "gecko": {
+      "strict_min_version": "57.0a1"
+    }
+  }
+
+}
