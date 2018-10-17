@@ -49,7 +49,6 @@ const scan = async (hostname) => {
 // this is the handler that will continue to contact the r
 const scanHandler = async (hostname, tabId) => {
   let count = 0;
-  let results = { 'state': 'UNKNOWN' };
   const MAX_ATTEMPTS = 20;
   const SLEEP_TIME_MILLISECONDS = 1000;
 
@@ -59,11 +58,9 @@ const scanHandler = async (hostname, tabId) => {
     count += 1;
     results = await scan(hostname);
 
-
     if (['ABORTED', 'FAILED', 'FINISHED'].includes(results.state)) {
       if (results.state == 'FINISHED') {
-        // update the icon, but only if the scan had successfully finished
-        updateIcon(results, tabId);
+        updateIcon(results, tabId); // only if the scan had successfully finished
       }
 
       break;
@@ -77,8 +74,14 @@ const scanHandler = async (hostname, tabId) => {
 
 // when we get the first response back from the website, initiate the scan
 browser.webRequest.onResponseStarted.addListener(
-  (details) => {
-    results = scanHandler(new URL(details.url).hostname, details.tabId);
+  async (details) => {
+    // update to spinner icon
+    await browser.browserAction.setIcon({
+      path: 'icons/spinner.svg',
+      tabId: details.tabId,
+    });
+
+    scanHandler(new URL(details.url).hostname, details.tabId);
   },
   {urls: ["http://*/*", "https://*/*"], types: ["main_frame"]}
 );
@@ -87,8 +90,6 @@ browser.webRequest.onResponseStarted.addListener(
 // here is the handler for clicking the browserAction (aka the icon)
 browser.browserAction.onClicked.addListener(async (details) => {
   // get the current tab hostname
-  console.log('in browseraction', details.url);
-
   if (details.url !== undefined) {
     const hostname = new URL(details.url).hostname;
 
