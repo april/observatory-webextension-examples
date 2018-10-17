@@ -1,17 +1,26 @@
 {
 
-  "description": "Altering HTTP responses",
+  "description": "HTTP Observatory Auto-calculator",
   "manifest_version": 2,
-  "name": "http-response-filter",
+  "name": "http-observatory-tweir",
   "version": "1.0",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/http-response",
+  "homepage_url": "https://github.com/april/observatory-webextension-examples/tristan",
   "icons": {
     "48": "pen.svg"
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking", "https://example.com/*"
+    "webRequest", "webRequestBlocking", "tabs", "https://example.com/*"
   ],
+
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "default.png"
+    },
+    "default_title": "HTTP Observatory"
+
+  }, 
 
   "background": {
     "scripts": ["background.js"]

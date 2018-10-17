@@ -1,22 +1,14 @@
-function listener(details) {
-  let filter = browser.webRequest.filterResponseData(details.requestId);
-  let decoder = new TextDecoder("utf-8");
-  let encoder = new TextEncoder();
+async function loadObservatory() {
 
-  filter.ondata = event => {
-    let str = decoder.decode(event.data, {stream: true});
-    // Just change any instance of Example in the HTTP response
-    // to WebExtension Example.
-    str = str.replace(/Example/g, 'WebExtension Example');
-    filter.write(encoder.encode(str));
-    filter.disconnect();
-  }
+  let allTabs = await browser.tabs.query({currentWindow: true, active: true});
+  hostname = new URL(allTabs[0].url).hostname;
+  console.log('current tab hostname is ', hostname)
 
-  return {};
+  browser.tabs.create({
+    url: "https://observatory.mozilla.org/analyze/" + hostname
+
+    // url: "https://http-observatory.security.mozilla.org/api/v1/analyze?host=" + hostname
+  });
 }
 
-browser.webRequest.onBeforeRequest.addListener(
-  listener,
-  {urls: ["https://example.com/*"], types: ["main_frame"]},
-  ["blocking"]
-);
+browser.browserAction.onClicked.addListener(loadObservatory);
