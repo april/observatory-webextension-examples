@@ -34,9 +34,20 @@ function loadObservatory() {
   });
 }
 
-function updateIcon() {
+function updateIcon(grade) {
+  iconPath = "";
 
+  if (grade == undefined) {
+    iconPath = "icons/default.png";
+  }
+  else {
+    iconPath = "icons/" + grade + ".svg";
+  }
 
+  browser.browserAction.setIcon({
+    path: iconPath,
+    tabId: currentTab.id
+  });
 }
 
 function updateTooltip(hostname, grade) {
@@ -46,24 +57,30 @@ function updateTooltip(hostname, grade) {
 
   browser.browserAction.setTitle({
     title: hostname + " - " + grade,
-    tabId: currentTab.id});
+    tabId: currentTab.id
+  });
 
+}
+
+function pollObservatory() {
+  observatoryAPIUrl = "https://http-observatory.security.mozilla.org/api/v1/analyze?host=" + hostname;
+  
+  $.get(observatoryAPIUrl,function( data ) {
+    updateTooltip(hostname, data.grade);
+
+    if (data.state == 'FINISHED') {
+      updateIcon(data.grade);
+    }
+    else {
+      setTimeout(pollObservatory,1000);
+    }
+  });
 }
 
 function runObservatoryScan(requestDetails) {
   hostname = new URL(requestDetails.url).hostname;
   console.log("Launching background scan: " + hostname);
-
-  observatoryAPIUrl = "https://http-observatory.security.mozilla.org/api/v1/analyze?host=" + hostname;
-  
-  $.get(observatoryAPIUrl,function( data ) {
-
-    console.log('Scan Results: ' + hostname + ' - ' + data.grade);
-
-    updateIcon(data.grade);
-    updateTooltip(hostname, data.grade);
-  });
-
+  pollObservatory(hostname);
 }
 
 browser.webRequest.onCompleted.addListener(

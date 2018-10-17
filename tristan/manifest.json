@@ -6,17 +6,17 @@
   "version": "1.0",
   "homepage_url": "https://github.com/april/observatory-webextension-examples/tristan",
   "icons": {
-    "48": "default.png"
+    "48": "icons/default.png"
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking", "tabs", "*://*/*", "https://www.mozilla.org/*"
+    "webRequest", "webRequestBlocking", "tabs", "*://*/*"
   ],
 
   "browser_action": {
     "browser_style": true,
     "default_icon": {
-      "16": "default.png"
+      "16": "icons/default.png"
     },
     "default_title": "HTTP Observatory"
 
