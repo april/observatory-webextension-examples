@@ -17,6 +17,13 @@
     "scripts": ["background.js"]
   },
 
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": "icons/unknown.svg",
+    "default_title": "Observatory Scan Results",
+    "default_popup": "popup/index.html"
+  },
+
   "applications": {
     "gecko": {
       "strict_min_version": "57.0a1"
