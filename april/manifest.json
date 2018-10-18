@@ -1,15 +1,15 @@
 {
-  "description": "Observatory Scanner",
+  "name": "Security Report Card",
+  "description": "Uses the Mozilla Observatory to scan sites and determine how secure they are.",
   "manifest_version": 2,
-  "name": "observatory-scanner",
-  "version": "1.0",
+  "version": "1.0.1",
   "homepage_url": "https://github.com/april/observatory-webextension-examples/tree/master/april",
   "icons": {
-    "48": "icons/unknown.svg"
+    "48": "icons/security-report-card.svg"
   },
 
   "permissions": [
-    "tabs", "webRequest", "webRequestBlocking", "http://*/*", "https://*/*"
+    "tabs", "webRequest", "http://*/*", "https://*/*"
   ],
 
   "background": {
@@ -18,7 +18,7 @@
 
   "browser_action": {
     "browser_style": true,
-    "default_icon": "icons/unknown.svg",
+    "default_icon": "icons/security-report-card.svg",
     "default_title": "Observatory Scan Results"
   },
 
