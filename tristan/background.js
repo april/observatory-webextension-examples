@@ -24,6 +24,10 @@ browser.windows.onFocusChanged.addListener(updateActiveTab);
 updateActiveTab();
 
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 function loadObservatory() {
   hostname = new URL(currentTab.url).hostname;
@@ -62,20 +66,29 @@ function updateTooltip(hostname, grade) {
 
 }
 
-function pollObservatory() {
+async function pollObservatory(hostname) {
   observatoryAPIUrl = "https://http-observatory.security.mozilla.org/api/v1/analyze?host=" + hostname;
-  
-  $.get(observatoryAPIUrl,function( data ) {
-    updateTooltip(hostname, data.grade);
+  $.post(observatoryAPIUrl);  //kickoff a scan
 
-    if (data.state == 'FINISHED') {
-      updateIcon(data.grade);
-    }
-    else {
-      setTimeout(pollObservatory,1000);
-    }
-  });
+  counter = 0;
+  MAX_TRIES = 50
+
+  while (counter < MAX_TRIES) {       // try MAX_TRIES times
+    counter += 1;
+
+    $.get(observatoryAPIUrl, function( data ) {   // pickup scan results
+    
+      if (data.state == 'FINISHED') {
+        updateIcon(data.grade);
+        updateTooltip(hostname, data.grade);
+        counter = MAX_TRIES;        // don't loop any more
+      }
+    });
+    console.log('Sleeping on ' + hostname);
+    await sleep(2000);    //wait 2 seconds
+  }
 }
+
 
 function runObservatoryScan(requestDetails) {
   hostname = new URL(requestDetails.url).hostname;
@@ -83,10 +96,13 @@ function runObservatoryScan(requestDetails) {
   pollObservatory(hostname);
 }
 
+// when a page loads, immediately start an observatory scan
 browser.webRequest.onCompleted.addListener(
   runObservatoryScan,
   {urls: ["*://*/*"], types: ["main_frame"]}
   );
+
+// if a user clicks, load the Observatory page with full results
 browser.browserAction.onClicked.addListener(
   loadObservatory
   );
