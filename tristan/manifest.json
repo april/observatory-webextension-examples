@@ -1,0 +1,35 @@
+{
+
+  "description": "HTTP Observatory Auto-calculator",
+  "manifest_version": 2,
+  "name": "http-observatory-tweir",
+  "version": "1.0",
+  "homepage_url": "https://github.com/april/observatory-webextension-examples/tristan",
+  "icons": {
+    "48": "icons/default.png"
+  },
+
+  "permissions": [
+    "webRequest", "webRequestBlocking", "tabs", "*://*/*"
+  ],
+
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "icons/default.png"
+    },
+    "default_title": "HTTP Observatory"
+
+  }, 
+
+  "background": {
+    "scripts": ["jquery-3.3.1.min.js", "background.js"]
+  },
+
+  "applications": {
+    "gecko": {
+      "strict_min_version": "57.0a1"
+    }
+  }
+
+}
